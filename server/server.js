@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 //import ApolloServer
 const { ApolloServer } = require('apollo-server-express');
 //import our typeDefs and resolvers
@@ -26,6 +27,15 @@ const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   //integerate our Apollo server with the Express application as middleware
   server.applyMiddleware({ app });
+
+//serve up static assets if node environment is in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+//
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
   db.once('open', () => {
     app.listen(PORT, () => {
