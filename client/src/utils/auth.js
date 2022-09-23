@@ -3,7 +3,7 @@ import decode from 'jwt-decode';
 class AuthService {
     //retrieve data saved in token
     getProfile() {
-        return decode(this.gettoken());
+        return decode(this.getToken());
     }
     //check of the user is still logged in
     loggedIn() {
